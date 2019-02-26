@@ -1,90 +1,118 @@
+//---TODO:Add logic for log.txt file to append information---
+
 require('dotenv').config();
 
-//Constructors
+//---------Constructors--------------------------
 var Spotify = require('node-spotify-api');
 
-// var Omdb = require('omdb');
+var axios = require('axios');
 
-var BandsInTown = require('bandsintown');
+var fs = require('fs');
 
-//-------------------------
+var moment = require('moment');
+//---------End Constructors--------------------------
+
+//------------KEYS-------------
 var keys = require('./keys.js');
 
 var spotify = new Spotify(keys.spotify);
+//------------End KEYS-------------
 
-// var omdb = new Omdb(keys.omdb);
-
-var bandsintown = new BandsInTown(keys.bands);
-
-//-------------------------
-
-
-spotify.search({
-    type: 'track',
-    query: 'The Sign'
-}, function (err, data) {
-    if (err) {
-        return console.log('Error occurred: ' + err);
+//------------Spotify Search-------------
+function searchSpotify(search) {
+    if (!search) {
+        search = 'The Sign Ace of Base';
     }
-    console.log(data);
-});
-
-//---------------------------
-
-// omdb.search('saw', function (err, movies) {
-//     if (err) {
-//         return console.error(err);
-//     }
-
-//     if (movies.length < 1) {
-//         return console.log('No movies were found!');
-//     }
-
-//     movies.forEach(function (data) {
-//         console.log('%s (%d)', data.title, data.year);
-//     });
-
-//     // Saw (2004)
-//     // Saw II (2005)
-// });
-
-// omdb.get({
-//     title: 'Saw',
-//     year: 2004
-// }, true, function (err, data) {
-//     if (err) {
-//         return console.error(err);
-//     }
-
-//     if (!data) {
-//         return console.log('data not found!');
-//     }
-
-//     console.log('%s (%d) %d/10', data.title, data.year, data.imdb.rating);
-//     console.log(data.plot);
-
-//     // Saw (2004) 7.6/10
-//     // Two men wake up at opposite sides of a dirty, disused bathroom, chained
-//     // by their ankles to pipes. Between them lies...
-// });
-
-//---------------------------
-
-
-
-bandsintown
-    .getArtistEventList('Skrillex')
-    .then(function (events) {
-        // return array of events
+    spotify.search({
+        type: 'track',
+        query: search,
+        limit: 1
+    }, function (err, data) {
+        if (err) {
+            return console.log('Error occurred: ' + err);
+        }
+        console.log('\nArtist: ' + data.tracks.items[0].artists[0].name);
+        console.log('\nSong title: ' + data.tracks.items[0].name);
+        console.log('\nPreview link: ' + data.tracks.items[0].external_urls.spotify);
+        console.log('\nAlbum: ' + data.tracks.items[0].album.name + '\n');
     });
+};
+//-------------------End Spotify Search---------------
+
+//--------------------Movie Search--------------------
+function searchOmdb(search) {
+    if (!search) {
+        search = 'Mr. Nobody';
+    }
+    var url = 'http://www.omdbapi.com/?t=' + search + '&y=&plot=short&apikey=' + keys.omdb.id;
+    axios.get(url).then(
+        function (response) {
+            console.log('\nTitle: ' + response.data.Title);
+            console.log('\nRelease Year: ' + response.data.Year);
+            console.log('\nIMDB Rating: ' + response.data.Ratings[0].Value);
+            console.log('\nRotten Tomatoes Rating: ' + response.data.Ratings[1].Value);
+            console.log('\nCountry Produced: ' + response.data.Country);
+            console.log('\nLanguage: ' + response.data.Language);
+            console.log('\nPlot: ' + response.data.Plot);
+            console.log('\nActors: ' + response.data.Actors + '\n');
+        }
+    );
+}
+//--------------------End Movie Search--------------------
+
+//--------------------Band Search-------------------------
+function searchBands(search) {
+    if (!search) {
+        search = 'Maroon 5';
+    }
+    var url = 'https://rest.bandsintown.com/artists/' + search + '/events?app_id=' + keys.bands.id;
+    axios.get(url).then(
+        function (response) {
+            var eventTime = response.data[0].datetime;
+            console.log('\nVenue: ' + response.data[0].venue.name);
+            console.log('\nVenue Location: ' + response.data[0].venue.city);
+            console.log('\nDate of Event: ' + moment(eventTime).format('MM/DD/YYYY') + '\n');
+        }
+    );
+}
+//------------------End Band Search---------------------------
+
+//------------------Text File---------------------------------
+function searchText() {
+    fs.readFile('random.txt', 'utf8', function (err, data) {
+        if (err) throw err;
+        //console.log(data);
+        var dataArray = data.split(',');
+
+        command = dataArray[0];
+        media = dataArray[1];
+        searchAll();
+    });
+};
+//------------End Text File---------------------------------
+
+//--------------Command Logic-------------------------------
+var command = process.argv[2];
+var media = process.argv.slice(3).join(' ');
 
 
-//-----------
+var searchAll = function () {
+    if (command === 'spotify-this-song') {
+        searchSpotify(media);
+    };
 
-// var command = process.argv[2];
+    if (command === 'concert-this') {
+        searchBands(media);
+    };
 
-// var media = process.argv[3];
+    if (command === 'movie-this') {
+        searchOmdb(media);
+    };
 
-// if (command === 'spotify-this-song') {
+    if (command === 'do-what-it-says') {
+        searchText(media);
+    };
+}
 
-// };
+searchAll();
+//--------------End Command Logic---------------------------
