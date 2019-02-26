@@ -24,13 +24,13 @@ If you haven't written a markdown file yet, [click here for a rundown](https://g
 
     ![Concert this gif](/gifs/concertthis.gif)
 
-   * This will search the Bands in Town Artist Events API (`"https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp"`) for an artist and render the following information about each event to the terminal:
+   * This will search the Bands in Town Artist Events API for an artist and render the following information about their next event to the terminal:
 
      * Name of the venue
 
      * Venue location
 
-     * Date of the Event (use moment to format this as "MM/DD/YYYY")
+     * Date of the Event ("MM/DD/YYYY")
 
 2. `node liri.js spotify-this-song '<song name here>'`
 
