@@ -224,59 +224,65 @@ If you have any questions about this project or the material we have covered, pl
 **Good Luck!**
 
 
-liri-node-app
-Overview
+# liri-node-app
+
+### Overview
+
 LIRI will be a command line node app that takes in parameters and gives you back data. It takes in 4 commands as described below.
 
-What Each Command Should Do
-node liri.js concert-this <artist/band name here>
+### What Each Command Should Do
 
-Concert this gif
+1. `node liri.js concert-this <artist/band name here>`
 
-This will search the Bands in Town Artist Events API ("https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp") for an artist and render the following information about each event to the terminal:
+    ![Concert this gif](/gifs/concertthis.gif)
 
-Name of the venue
+   * This will search the Bands in Town Artist Events API (`"https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp"`) for an artist and render the following information about each event to the terminal:
 
-Venue location
+     * Name of the venue
 
-Date of the Event (use moment to format this as "MM/DD/YYYY")
+     * Venue location
 
-node liri.js spotify-this-song '<song name here>'
+     * Date of the Event (use moment to format this as "MM/DD/YYYY")
 
-Spotify this gif
+2. `node liri.js spotify-this-song '<song name here>'`
 
-This will show the following information about the song in your terminal/bash window
+    ![Spotify this gif](/gifs/spotifythis.gif)
 
-Artist(s)
+   * This will show the following information about the song in your terminal/bash window
 
-The song's name
+     * Artist(s)
 
-A preview link of the song from Spotify
+     * The song's name
 
-The album that the song is from
+     * A preview link of the song from Spotify
 
-If no song is provided then your program will default to "The Sign" by Ace of Base.
+     * The album that the song is from
 
-node liri.js movie-this '<movie name here>'
+   * If no song is provided then your program will default to "The Sign" by Ace of Base.
 
-Movie this gif
+3. `node liri.js movie-this '<movie name here>'`
 
-This will output the following information to your terminal/bash window:
+    ![Movie this gif](/gifs/moviethis.gif)
 
-  * Title of the movie.
-  * Year the movie came out.
-  * IMDB Rating of the movie.
-  * Rotten Tomatoes Rating of the movie.
-  * Country where the movie was produced.
-  * Language of the movie.
-  * Plot of the movie.
-  * Actors in the movie.
-If the user doesn't type a movie in, the program will output data for the movie 'Mr. Nobody.'
+   * This will output the following information to your terminal/bash window:
 
-node liri.js do-what-it-says
+     ```
+       * Title of the movie.
+       * Year the movie came out.
+       * IMDB Rating of the movie.
+       * Rotten Tomatoes Rating of the movie.
+       * Country where the movie was produced.
+       * Language of the movie.
+       * Plot of the movie.
+       * Actors in the movie.
+     ```
 
-Do-what-it-says gif
+   * If the user doesn't type a movie in, the program will output data for the movie 'Mr. Nobody.'
 
-Using the fs Node package, LIRI will take the text inside of random.txt and then use it to call one of LIRI's commands.
+4. `node liri.js do-what-it-says`
 
-It should run spotify-this-song for "I Want it That Way," as follows the text in random.txt.
+    ![Do-what-it-says gif](/gifs/whatitsays.gif)
+
+   * Using the `fs` Node package, LIRI will take the text inside of random.txt and then use it to call one of LIRI's commands.
+
+     * It should run `spotify-this-song` for "I Want it That Way," as follows the text in `random.txt`.
